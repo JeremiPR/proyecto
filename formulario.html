@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Cita</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Formulario de Cita</h1>
+        <form id="formCita" method="POST" onsubmit="return validarFormulario(event)">
+            <div class="form-group">
+                <label for="fecha">Fecha de la Cita:</label>
+                <input type="date" id="fecha" name="fecha" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="hora">Hora de la Cita:</label>
+                <input type="time" id="hora" name="hora" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nombre">Nombre del Paciente:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required>
+                <span class="error" id="error-nombre"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="dni">DNI del Paciente:</label>
+                <input type="text" id="dni" name="dni" placeholder="DNI del paciente" required>
+                <span class="error" id="error-dni"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="apellidos">Apellidos del Paciente:</label>
+                <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos completos" required>
+                <span class="error" id="error-apellidos"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="telefono">Teléfono del Paciente:</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="Teléfono de contacto" required>
+                <span class="error" id="error-telefono"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="observaciones">Observaciones:</label>
+                <textarea id="observaciones" name="observaciones" rows="4" placeholder="Ingrese las observaciones..." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn-submit">Enviar</button>
+        </form>
+    </div>
+    </div>
+    <script src="validacion.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

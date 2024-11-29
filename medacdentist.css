@@ -1,0 +1,143 @@
+header{
+    width: 100%;
+    position: relative;
+    background-image: url(header.jpg);
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-color: white;
+    position: relative;
+    width: 100%;
+    min-height: 760px;
+    padding: 160px 0 0;
+    background-size: cover;
+}
+.itemlogo{
+    display: flex;
+    align-items: flex-start;
+    padding: 40px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+.logo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-left: 100px;
+}
+.logo img{
+    margin-right: 15px;
+    max-width: 120px;
+    height: auto;
+}
+.wrapper{
+    justify-content: flex-end;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 600px;
+    height: 600px;
+    width: 1600px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.box-formulario{
+    display: flex;
+    flex-direction: column-reverse;
+    margin-top: 100px;
+}
+.formulario{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    background-color:#002e4c;
+    padding: 20px;
+    border-radius: 10px;
+}
+.formulario h1{
+    font-family: inherit;
+    font-weight: bold;
+    color: aliceblue;
+    font-size: 30px;
+}
+.formulario h2{
+    font-family: inherit;
+    font-weight: bold;
+    color: aliceblue;
+    font-size: 25px;
+}
+.formulario p{
+    font-family: inherit;
+    font-weight: bold;
+    color: aliceblue;
+    font-size: 15px;
+}
+.formulario h3{
+    font-family: inherit;
+    font-weight: bold;
+    color: aliceblue;
+    font-size: 23px;
+}
+#telefono{
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+#boton{
+    width: 100%;
+    padding: 10px;
+    background-color:#C4007C;
+    border-radius: 10px;
+    margin-top: 20px;
+    line-height: 28px;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    display: block;
+    color: aliceblue;
+    font-size: 16px;
+}
+section{
+    width: 100%;
+    padding: 40px 0px;
+    background-color: #FAFAFA;
+}
+.explicacion{
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.container{
+    padding: 40px 0px;
+}
+.row{
+    margin: 10px 0px;
+    padding: 10px 0px;
+}
+.row h3{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+.bot{
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    padding: 15px 40px;
+    align-self: center;
+}
+.contacto{
+    width: 100%;
+    background-color: #dadada;
+    padding: 0px;
+}

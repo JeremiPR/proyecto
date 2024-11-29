@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tabladatos.css">
+    <title>Formulario de Cita</title>
+    <style>
+        .error { color: red; font-size: 12px; }
+        .form-group input.error { border: 1px solid red; }
+        .form-container { max-width: 600px; margin: auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 8px; text-align: left; }
+        .btn-submit { padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 style="font-weight: 600; font-size: 25px;">Formulario de Cita</h1>
+        <form id="formCita" method="POST" onsubmit="return validarFormulario(event)">
+            <div class="form-group">
+                <label for="fecha">Fecha de la Cita:</label>
+                <input type="date" id="fecha" name="fecha" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="hora">Hora de la Cita:</label>
+                <input type="time" id="hora" name="hora" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nombre">Nombre del Paciente:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required>
+                <span class="error" id="error-nombre"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="dni">DNI del Paciente:</label>
+                <input type="text" id="dni" name="dni" placeholder="DNI del paciente" required>
+                <span class="error" id="error-dni"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="apellidos">Apellidos del Paciente:</label>
+                <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos completos" required>
+                <span class="error" id="error-apellidos"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="telefono">Teléfono del Paciente:</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="Teléfono de contacto" required>
+                <span class="error" id="error-telefono"></span> <!-- Aquí aparecerá el mensaje de error -->
+            </div>
+            
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="observaciones">Observaciones:</label>
+                <textarea id="observaciones" name="observaciones" rows="4" placeholder="Ingrese las observaciones..." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn-submit">Enviar</button>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h2>Citas Programadas</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Paciente</th>
+                    <th>Cita</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCitas">
+                <!-- Las citas se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Definir la clase Cita
+        class Cita {
+            constructor(fecha, hora, nombre, dni, apellidos, telefono, fechaNacimiento, observaciones) {
+                this.fecha = fecha;
+                this.hora = hora;
+                this.nombre = nombre;
+                this.dni = dni;
+                this.apellidos = apellidos;
+                this.telefono = telefono;
+                this.fechaNacimiento = fechaNacimiento;
+                this.observaciones = observaciones;
+                this.id = new Date().getTime();  // Usamos el timestamp como identificador único
+            }
+        }
+
+        // Validar el formulario y almacenar las citas en localStorage
+        function validarFormulario(event) {
+            event.preventDefault();
+            limpiarErrores();
+            
+            const nombre = document.getElementById('nombre').value;
+            const dni = document.getElementById('dni').value;
+            const apellidos = document.getElementById('apellidos').value;
+            const telefono = document.getElementById('telefono').value;
+            const fechaNacimiento = document.getElementById('fecha_nacimiento').value;
+            const fecha = document.getElementById('fecha').value;
+            const hora = document.getElementById('hora').value;
+            const observaciones = document.getElementById('observaciones').value;
+
+            let esValido = true;
+
+            // Validación de nombre (solo letras y espacios)
+            const regexNombre = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+            if (!regexNombre.test(nombre)) {
+                mostrarError('nombre', 'El nombre solo puede contener letras y espacios');
+                esValido = false;
+            }
+
+            // Validación de DNI (número seguido de una letra)
+            const regexDNI = /^\d{8}[A-Za-z]$/;
+            if (!regexDNI.test(dni)) {
+                mostrarError('dni', 'DNI no válido. Debe ser un número de 8 dígitos seguido de una letra');
+                esValido = false;
+            }
+
+            // Validación de apellidos (solo letras y espacios)
+            const regexApellidos = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+            if (!regexApellidos.test(apellidos)) {
+                mostrarError('apellidos', 'Los apellidos solo pueden contener letras y espacios');
+                esValido = false;
+            }
+
+            // Validación de teléfono (9 dígitos)
+            const regexTelefono = /^\d{9}$/;
+            if (!regexTelefono.test(telefono)) {
+                mostrarError('telefono', 'El teléfono debe tener 9 dígitos');
+                esValido = false;
+            }
+
+            // Validación de fecha de nacimiento
+            if (fechaNacimiento === '') {
+                mostrarError('fecha-nacimiento', 'La fecha de nacimiento es obligatoria');
+                esValido = false;
+            }
+
+            // Si las validaciones son correctas, crear la cita y guardarla
+            if (esValido) {
+                const cita = new Cita(fecha, hora, nombre, dni, apellidos, telefono, fechaNacimiento, observaciones);
+                let citas = JSON.parse(localStorage.getItem('citas')) || [];
+                citas.push(cita);
+                localStorage.setItem('citas', JSON.stringify(citas));
+
+                alert('Cita guardada correctamente');
+                cargarCitas();
+            }
+
+            return esValido;
+        }
+
+        // Mostrar mensajes de error
+        function mostrarError(campo, mensaje) {
+            const errorElemento = document.getElementById('error-' + campo);
+            const inputElemento = document.getElementById(campo);
+            errorElemento.textContent = mensaje;
+            errorElemento.classList.add('visible');
+            inputElemento.classList.add('error');
+        }
+
+        // Limpiar los errores del formulario
+        function limpiarErrores() {
+            const errorElementos = document.querySelectorAll('.error');
+            const inputElementos = document.querySelectorAll('input, textarea');
+            errorElementos.forEach((error) => {
+                error.textContent = '';
+                error.classList.remove('visible');
+            });
+            inputElementos.forEach((input) => {
+                input.classList.remove('error');
+            });
+        }
+
+        // Cargar las citas desde localStorage
+        function cargarCitas() {
+            const tabla = document.getElementById('tablaCitas');
+            tabla.innerHTML = ''; // Limpiar la tabla
+
+            let citas = JSON.parse(localStorage.getItem('citas')) || [];
+
+            if (citas.length === 0) {
+                const fila = document.createElement('tr');
+                fila.innerHTML = '<td colspan="4">No hay citas programadas</td>';
+                tabla.appendChild(fila);
+            } else {
+                citas.forEach((cita, index) => {
+                    const fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${cita.nombre}</td>
+                        <td>${cita.fecha} ${cita.hora}</td>
+                        <td>
+                            <button onclick="eliminarCita(${cita.id})">Eliminar</button>
+                            <button onclick="modificarCita(${cita.id})">Modificar</button>
+                        </td>
+                    `;
+                    tabla.appendChild(fila);
+                });
+            }
+        }
+
+        // Eliminar una cita
+        function eliminarCita(id) {
+            let citas = JSON.parse(localStorage.getItem('citas')) || [];
+            citas = citas.filter(cita => cita.id !== id);
+            localStorage.setItem('citas', JSON.stringify(citas));
+            cargarCitas();
+        }
+
+        // Modificar una cita
+        function modificarCita(id) {
+            let citas = JSON.parse(localStorage.getItem('citas')) || [];
+            const cita = citas.find(cita => cita.id === id);
+
+            document.getElementById('nombre').value = cita.nombre;
+            document.getElementById('dni').value = cita.dni;
+            document.getElementById('apellidos').value = cita.apellidos;
+            document.getElementById('telefono').value = cita.telefono;
+            document.getElementById('fecha_nacimiento').value = cita.fechaNacimiento;
+            document.getElementById('fecha').value = cita.fecha;
+            document.getElementById('hora').value = cita.hora;
+            document.getElementById('observaciones').value = cita.observaciones;
+
+            // Cambiar el comportamiento del formulario a actualización
+            document.getElementById('formCita').onsubmit = function(event) {
+                event.preventDefault();
+                actualizarCita(id);
+            };
+        }
+
+        // Actualizar una cita
+        function actualizarCita(id) {
+            let citas = JSON.parse(localStorage.getItem('citas')) || [];
+            const citaIndex = citas.findIndex(cita => cita.id === id);
+            
+            citas[citaIndex] = new Cita(
+                document.getElementById('fecha').value,
+                document.getElementById('hora').value,
+                document.getElementById('nombre').value,
+                document.getElementById('dni').value,
+                document.getElementById('apellidos').value,
+                document.getElementById('telefono').value,
+                document.getElementById('fecha_nacimiento').value,
+                document.getElementById('observaciones').value
+            );
+
+            localStorage.setItem('citas', JSON.stringify(citas));
+            cargarCitas();
+            document.getElementById('formCita').onsubmit = validarFormulario;
+        }
+
+        // Cargar las citas al iniciar la página
+        document.addEventListener('DOMContentLoaded', cargarCitas);
+    </script>
+</body>
+</html>
