@@ -18,7 +18,7 @@ function validarFormulario(event) {
     event.preventDefault();
     // Limpiar los errores previos
     limpiarErrores();
-
+    //hola
     // Obtener los valores de los campos
     const nombre = document.getElementById('nombre').value;
     const dni = document.getElementById('dni').value;
